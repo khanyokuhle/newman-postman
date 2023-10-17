@@ -193,6 +193,8 @@
 									"pm.test(\"Expected booking id is in the returned array\", function () {",
 									"    pm.expect(booking_ids).to.include(pm.variables.get(\"booking_id\"));",
 									"});",
+									"",
+									"postman.setNextRequest('Auth');",
 									""
 								],
 								"type": "text/javascript"
@@ -1121,6 +1123,52 @@
 			]
 		},
 		{
+			"name": "Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains token\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"token\");",
+							"});",
+							"",
+							"postman.setNextRequest(null)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"password123\"\n}"
+				},
+				"url": {
+					"raw": "{{rb_url}}/auth",
+					"host": [
+						"{{rb_url}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Ping",
 			"event": [
 				{
@@ -1149,50 +1197,6 @@
 					],
 					"path": [
 						"ping"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Auth",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Response contains token\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property(\"token\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\" : \"admin\",\n    \"password\" : \"password123\"\n}"
-				},
-				"url": {
-					"raw": "{{rb_url}}/auth",
-					"host": [
-						"{{rb_url}}"
-					],
-					"path": [
-						"auth"
 					]
 				}
 			},
